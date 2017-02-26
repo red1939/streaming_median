@@ -7,8 +7,14 @@ project(StreamingMedian CXX)
 add_subdirectory("ext/Catch")
 include_directories("ext/Catch/include")
 
-add_executable(smedian src/main.cpp)
-add_executable(smedian_test src/tests.cpp)
+set(
+    SOURCES
+    src/SingleArrayMedian.hpp
+    src/SortedArray.hpp
+)
+
+add_executable(smedian src/main.cpp ${SOURCES})
+add_executable(smedian_test src/tests.cpp ${SOURCES})
 
 include(CTest)
 
