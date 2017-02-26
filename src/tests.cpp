@@ -6,7 +6,7 @@
 #include "SortedArray.hpp"
 
 
-using Array = median::MinSortedArray<int>;
+using Array = median::SortedArray<int>;
 
 SCENARIO("table can grow", "[SortedArray]")
 {
@@ -43,13 +43,25 @@ SCENARIO("(less than) sorting is correct", "[SortedArray]")
         REQUIRE(array.at(index) == value);
     };
 
-    WHEN("one element pushed")
+    WHEN("one element is pushed")
     {
         array.push_back(42);
 
         THEN("it will be present")
         {
             check(0, 42);
+        }
+    }
+
+    WHEN("two element are pushed")
+    {
+        array.push_back(3);
+        array.push_back(1);
+
+        THEN("they will be ordered")
+        {
+            check(0, 1);
+            check(1, 3);
         }
     }
 
