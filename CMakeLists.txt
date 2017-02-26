@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.4.0)
 
 project(StreamingMedian CXX)
 
+# Deal with funny installation of nested projects
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE PATH "..." FORCE)
+
 add_subdirectory("ext/Catch")
 include_directories("ext/Catch/include")
 
@@ -20,4 +23,7 @@ include(CTest)
 
 add_test(ApplicationRuns smedian)
 add_test(UnitTestsPass smedian_test)
+
+install(TARGETS smedian_test DESTINATION bin)
+install(TARGETS smedian DESTINATION bin)
 
