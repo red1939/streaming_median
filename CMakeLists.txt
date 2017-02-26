@@ -4,5 +4,14 @@ cmake_minimum_required(VERSION 3.4.0)
 
 project(StreamingMedian CXX)
 
+add_subdirectory("ext/Catch")
+include_directories("ext/Catch/include")
+
 add_executable(smedian src/main.cpp)
+add_executable(smedian_test src/tests.cpp)
+
+include(CTest)
+
+add_test(ApplicationRuns smedian)
+add_test(UnitTestsPass smedian_test)
 
