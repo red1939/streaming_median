@@ -3,11 +3,15 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
+#include "BinaryHeap.hpp"
 #include "SingleArrayMedian.hpp"
 #include "SortedArray.hpp"
 
 
 using Array = median::SortedArray<int>;
+using MinHeap = median::BinaryHeap<int, median::HeapOrder::MinHeap>;
+using MaxHeap = median::BinaryHeap<int, median::HeapOrder::MaxHeap>;
+
 
 SCENARIO("table can grow", "[SortedArray]")
 {
@@ -238,4 +242,210 @@ SCENARIO("simple solution works", "[SingleArrayMedian]")
     test_three_elements_sequence<median::SingleArrayMedian>();
     test_six_elements_sequence<median::SingleArrayMedian>();
     test_same_elements_sequence<median::SingleArrayMedian>();
+}
+
+SCENARIO("size remains valid", "[BinaryHeap]")
+{
+    MinHeap min_heap;
+
+    WHEN("heap is empty") {
+        THEN("size is 0") {
+            REQUIRE(min_heap.getSize() == 0);
+        }
+    }
+
+    WHEN("one element is added to heap") {
+        min_heap.insert(42);
+
+        THEN("size is 1") {
+            REQUIRE(min_heap.getSize() == 1);
+        }
+    }
+
+    WHEN("ten elements are added to heap") {
+        for (int i = 0; i < 10; ++i) {
+            min_heap.insert(42);
+        }
+
+        THEN("size is 10") {
+            REQUIRE(min_heap.getSize() == 10);
+        }
+
+        AND_WHEN("3 elements are removed") {
+            min_heap.eraseRoot();
+            min_heap.eraseRoot();
+            min_heap.eraseRoot();
+
+            THEN("size is 7") {
+                REQUIRE(min_heap.getSize() == 7);
+            }
+        }
+    }
+}
+
+SCENARIO("ordering remains valid for min heap", "[BinaryHeap]")
+{
+    MinHeap min_heap;
+
+    constexpr auto first = 13;
+    constexpr auto second = 44;
+    constexpr auto third = -1;
+    constexpr auto fourth = 5;
+    constexpr auto fifth = 0;
+    constexpr auto sixth = 78;
+
+    WHEN("first element is added to heap") {
+        min_heap.insert(first);
+
+        THEN("it will become the root") {
+            REQUIRE(min_heap.getRoot() == first);
+        }
+
+        AND_WHEN("second, larger element is added") {
+            min_heap.insert(second);
+
+            THEN("first element is still the root") {
+                REQUIRE(min_heap.getRoot() == first);
+            }
+        }
+
+        AND_WHEN("third, smaller element is added") {
+            min_heap.insert(third);
+
+            THEN("third element becomes the root") {
+                REQUIRE(min_heap.getRoot() == third);
+            }
+        }
+
+        AND_WHEN("several larger elements are added") {
+            min_heap.insert(fourth);
+            min_heap.insert(fifth);
+            min_heap.insert(sixth);
+
+            THEN("new levels of binary tree will be filled but root will stay "
+                 "the same")
+             {
+                REQUIRE(min_heap.getRoot() == third);
+            }
+        }
+
+        AND_WHEN("root element is removed") {
+            min_heap.eraseRoot();
+
+            THEN("new root will be found") {
+                REQUIRE(min_heap.getRoot() == fifth);
+            }
+        }
+    }
+
+    WHEN("multiple elements of the same value are added to heap") {
+        constexpr auto same_value = 33;
+        min_heap.insert(same_value);
+        min_heap.insert(same_value);
+        min_heap.insert(same_value);
+
+        THEN("root will be one of the elements") {
+            REQUIRE(min_heap.getRoot() == same_value);
+        }
+
+        AND_WHEN("root is erased") {
+            min_heap.eraseRoot();
+
+            THEN("root will still have the same value") {
+                REQUIRE(min_heap.getRoot() == same_value);
+            }
+        }
+    }
+}
+
+SCENARIO("ordering remains valid for max heap", "[BinaryHeap]")
+{
+    MaxHeap max_heap;
+
+    constexpr auto first = 13;
+    constexpr auto second = 44;
+    constexpr auto third = -1;
+    constexpr auto fourth = 5;
+    constexpr auto fifth = 0;
+    constexpr auto sixth = 78;
+
+    WHEN("first element is added to heap") {
+        max_heap.insert(first);
+
+        THEN("it will become the root") {
+            REQUIRE(max_heap.getRoot() == first);
+        }
+
+        AND_WHEN("second, larger element is added") {
+            max_heap.insert(second);
+
+            THEN("second element will become the new root") {
+                REQUIRE(max_heap.getRoot() == second);
+            }
+        }
+
+        AND_WHEN("third, smaller element is added") {
+            max_heap.insert(third);
+
+            THEN("second element is still the root") {
+                REQUIRE(max_heap.getRoot() == second);
+            }
+        }
+
+        AND_WHEN("several larger elements are added") {
+            max_heap.insert(fourth);
+            max_heap.insert(fifth);
+            max_heap.insert(sixth);
+
+            THEN("new levels of binary tree will be filled and the new largest "
+                 "root is selected")
+             {
+                REQUIRE(max_heap.getRoot() == sixth);
+            }
+        }
+
+        AND_WHEN("root element is removed") {
+            max_heap.eraseRoot();
+
+            THEN("new root will be found") {
+                REQUIRE(max_heap.getRoot() == second);
+            }
+        }
+    }
+
+    WHEN("multiple elements of the same value are added to heap") {
+        constexpr auto same_value = 33;
+        max_heap.insert(same_value);
+        max_heap.insert(same_value);
+        max_heap.insert(same_value);
+
+        THEN("root will be one of the elements") {
+            REQUIRE(max_heap.getRoot() == same_value);
+        }
+
+        AND_WHEN("root is erased") {
+            max_heap.eraseRoot();
+
+            THEN("root will still have the same value") {
+                REQUIRE(max_heap.getRoot() == same_value);
+            }
+        }
+    }
+}
+
+SCENARIO("invalid operations are handled correctly", "[BinaryHeap]")
+{
+    MinHeap heap;
+
+    WHEN("we try to find root for empty heap") {
+        THEN("heap will throw") {
+            REQUIRE_THROWS(heap.getRoot());
+        }
+    }
+
+    WHEN("we try to remove the root from empty heap") {
+        THEN("heap will throw") {
+            REQUIRE_THROWS(heap.eraseRoot());
+        }
+    }
 }

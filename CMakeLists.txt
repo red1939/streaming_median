@@ -14,6 +14,7 @@ set(
     SOURCES
     src/SingleArrayMedian.hpp
     src/SortedArray.hpp
+    src/BinaryHeap.hpp
 )
 
 add_executable(smedian src/main.cpp ${SOURCES})
