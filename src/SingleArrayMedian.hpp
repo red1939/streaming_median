@@ -30,11 +30,26 @@ private:
 template<typename T>
 void median::SingleArrayMedian<T>::append(T value)
 {
-    (void)value;
+    this->array.push_back(value);
 }
 
 template<typename T>
 float median::SingleArrayMedian<T>::calculateMedian() const
 {
-    return 0.0;
+    auto const size = this->array.getSize();
+
+    if (size == 0) {
+        return 0.0f;
+    } else if ((size % 2) == 0) {
+        auto const left_index = (size / 2) - 1;
+        auto const right_index = left_index + 1;
+        auto const left = float(this->array.at(left_index));
+        auto const right = float(this->array.at(right_index));
+
+        // Should be more stable and precise than division of sum
+        return (left / 2.0f) + (right / 2.0f);
+    } else {
+        auto const center_index = (size / 2);
+        return float(this->array.at(center_index));
+    }
 }
