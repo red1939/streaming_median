@@ -1,5 +1,7 @@
 // Copyright 2017 Bartosz Bielecki
 
+#pragma once
+
 #include <cassert>
 #include <stdexcept>
 #include <functional>
@@ -30,7 +32,7 @@ public:
     SortedArray(SortedArray const& other) = delete;
     SortedArray& operator=(SortedArray const& other) = delete;
 
-    SortedArray(SortedArray && other) = default;
+    SortedArray(SortedArray&& other) = default;
     SortedArray& operator=(SortedArray&& other) = default;
 
     void push_back(T element);
@@ -47,7 +49,6 @@ private:
     void sort();
     size_t getNewCapacity() const;
     void grow();
-    void copyTo();
 
     static constexpr int growth_factor = 2;
 
@@ -55,6 +56,8 @@ private:
     size_t capacity{0};
     size_t size{0};
 };
+
+}
 
 // -------------------------------------------------------------------------- //
 
@@ -182,6 +185,4 @@ void median::SortedArray<T>::grow()
 
     this->data = std::move(new_buffer);
     this->capacity = new_capacity;
-}
-
 }

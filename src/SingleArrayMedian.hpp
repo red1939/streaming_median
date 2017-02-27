@@ -1,5 +1,7 @@
 // Copyright 2017 Bartosz Bielecki
 
+#pragma once
+
 #include "SortedArray.hpp"
 
 
@@ -18,19 +20,21 @@ public:
     float calculateMedian() const;
 
 private:
-    SortedArray heap;
+    SortedArray<T> array;
 };
 
 }
 
-template<typename T, class Heap>
-void median::SingleArrayMedian<T, Heap>::append(T value)
+// -------------------------------------------------------------------------- //
+
+template<typename T>
+void median::SingleArrayMedian<T>::append(T value)
 {
     (void)value;
 }
 
-template<typename T, class Heap>
-float median::SingleArrayMedian<T, Heap>::calculateMedian() const
+template<typename T>
+float median::SingleArrayMedian<T>::calculateMedian() const
 {
     return 0.0;
 }

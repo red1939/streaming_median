@@ -3,6 +3,7 @@
 #define CATCH_CONFIG_MAIN
 #include <catch.hpp>
 
+#include "SingleArrayMedian.hpp"
 #include "SortedArray.hpp"
 
 
@@ -124,3 +125,117 @@ SCENARIO("out of bounds index is reported", "[SortedArray]")
     }
 }
 
+template <template<typename> class Median>
+void test_empty_sequence()
+{
+    Median<int> m;
+
+    WHEN("no elements are added") {
+        THEN("median is equal 0") {
+            REQUIRE(m.calculateMedian() == Approx(0.0f));
+        }
+    }
+}
+
+template <template<typename> class Median>
+void test_one_element_sequence()
+{
+    Median<int> m;
+    constexpr int value = 42;
+
+    WHEN("one elements is added") {
+        m.append(value);
+
+        THEN("median is equal to this one element") {
+            REQUIRE(m.calculateMedian() == Approx(value));
+        }
+    }
+}
+
+template <template<typename> class Median>
+void test_two_elements_sequence()
+{
+    Median<int> m;
+    constexpr int value = 4;
+    constexpr int value2 = 0;
+
+    WHEN("two, different elements are added") {
+        m.append(value);
+        m.append(value2);
+
+        THEN("median is equal to average of these two") {
+            REQUIRE(m.calculateMedian() == Approx(2.0f));
+        }
+    }
+}
+
+template <template<typename> class Median>
+void test_three_elements_sequence()
+{
+    Median<int> m;
+    constexpr int value = -1;
+    constexpr int value2 = 15;
+    constexpr int value3 = 4;
+
+    WHEN("three, different elements are added") {
+        m.append(value);
+        m.append(value2);
+        m.append(value3);
+
+        THEN("median is equal to the middle element") {
+            REQUIRE(m.calculateMedian() == Approx(value3));
+        }
+    }
+}
+
+template <template<typename> class Median>
+void test_six_elements_sequence()
+{
+    Median<int> m;
+    constexpr int value = -1;
+    constexpr int value2 = 10;
+    constexpr int value3 = 0;
+    constexpr int value4 = 3;
+    constexpr int value5 = 2;
+    constexpr int value6 = -100;
+
+    WHEN("six, different elements are added") {
+        m.append(value);
+        m.append(value2);
+        m.append(value3);
+        m.append(value4);
+        m.append(value5);
+        m.append(value6);
+
+        THEN("median is equal to the average of middle elements") {
+            REQUIRE(m.calculateMedian() == Approx(1.0f));
+        }
+    }
+}
+
+template <template<typename> class Median>
+void test_same_elements_sequence()
+{
+    Median<int> m;
+    constexpr int value = 13;
+
+    WHEN("three, same elements are added") {
+        m.append(value);
+        m.append(value);
+        m.append(value);
+
+        THEN("median is equal to every element value") {
+            REQUIRE(m.calculateMedian() == Approx(value));
+        }
+    }
+}
+
+SCENARIO("simple solution works", "[SingleArrayMedian]")
+{
+    test_empty_sequence<median::SingleArrayMedian>();
+    test_one_element_sequence<median::SingleArrayMedian>();
+    test_two_elements_sequence<median::SingleArrayMedian>();
+    test_three_elements_sequence<median::SingleArrayMedian>();
+    test_six_elements_sequence<median::SingleArrayMedian>();
+    test_same_elements_sequence<median::SingleArrayMedian>();
+}
