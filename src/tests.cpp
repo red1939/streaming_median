@@ -6,6 +6,7 @@
 #include "BinaryHeap.hpp"
 #include "SingleArrayMedian.hpp"
 #include "SortedArray.hpp"
+#include "TwoHeapsMedian.hpp"
 
 
 using Array = median::SortedArray<int>;
@@ -242,6 +243,16 @@ SCENARIO("simple solution works", "[SingleArrayMedian]")
     test_three_elements_sequence<median::SingleArrayMedian>();
     test_six_elements_sequence<median::SingleArrayMedian>();
     test_same_elements_sequence<median::SingleArrayMedian>();
+}
+
+SCENARIO("optimal solution works", "[TwoHeapsMedian]")
+{
+    test_empty_sequence<median::TwoHeapsMedian>();
+    test_one_element_sequence<median::TwoHeapsMedian>();
+    test_two_elements_sequence<median::TwoHeapsMedian>();
+    test_three_elements_sequence<median::TwoHeapsMedian>();
+    test_six_elements_sequence<median::TwoHeapsMedian>();
+    test_same_elements_sequence<median::TwoHeapsMedian>();
 }
 
 SCENARIO("size remains valid", "[BinaryHeap]")
