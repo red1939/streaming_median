@@ -20,7 +20,7 @@ public:
     float calculateMedian() const;
 
 private:
-    SortedArray<T> array;
+    SortedArray<T> array{};
 };
 
 }

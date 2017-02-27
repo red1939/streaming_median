@@ -52,7 +52,7 @@ private:
 
     static constexpr int growth_factor = 2;
 
-    std::unique_ptr<T[]> data;
+    std::unique_ptr<T[]> data{nullptr};
     size_t capacity{0};
     size_t size{0};
 };
