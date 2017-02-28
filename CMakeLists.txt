@@ -13,9 +13,9 @@ include_directories("ext/Catch/include")
 set(
     SOURCES
     src/SingleArrayMedian.hpp
-    src/SortedArray.hpp
     src/BinaryHeap.hpp
     src/TwoHeapsMedian.hpp
+    src/DynamicArray.hpp
 )
 
 add_executable(smedian src/main.cpp ${SOURCES})
