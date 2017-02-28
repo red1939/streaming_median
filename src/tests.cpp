@@ -261,41 +261,41 @@ SCENARIO("ordering remains valid for min heap", "[BinaryHeap]")
         }
 
         AND_WHEN("second, larger element is added") {
-            min_heap.insert(second);
 
-            THEN("first element is still the root") {
-                REQUIRE(min_heap.getRoot() == first);
-            }
+        min_heap.insert(second);
+
+        THEN("first element is still the root") {
+            REQUIRE(min_heap.getRoot() == first);
         }
 
         AND_WHEN("third, smaller element is added") {
-            min_heap.insert(third);
 
-            THEN("third element becomes the root") {
-                REQUIRE(min_heap.getRoot() == third);
-            }
+        min_heap.insert(third);
+
+        THEN("third element becomes the root") {
+            REQUIRE(min_heap.getRoot() == third);
         }
 
         AND_WHEN("several larger elements are added") {
-            min_heap.insert(fourth);
-            min_heap.insert(fifth);
-            min_heap.insert(sixth);
 
-            THEN("new levels of binary tree will be filled but root will stay "
-                 "the same")
-             {
-                REQUIRE(min_heap.getRoot() == third);
-            }
+        min_heap.insert(fourth);
+        min_heap.insert(fifth);
+        min_heap.insert(sixth);
+
+        THEN("new levels of binary tree will be filled but root will stay "
+             "the same")
+        {
+            REQUIRE(min_heap.getRoot() == third);
         }
 
         AND_WHEN("root element is removed") {
-            min_heap.eraseRoot();
 
-            THEN("new root will be found") {
-                REQUIRE(min_heap.getRoot() == fifth);
-            }
+        min_heap.eraseRoot();
+
+        THEN("new root will be found") {
+            REQUIRE(min_heap.getRoot() == fifth);
         }
-    }
+    }}}}}
 
     WHEN("multiple elements of the same value are added to heap") {
         constexpr auto same_value = 33;
@@ -336,41 +336,37 @@ SCENARIO("ordering remains valid for max heap", "[BinaryHeap]")
         }
 
         AND_WHEN("second, larger element is added") {
-            max_heap.insert(second);
+        max_heap.insert(second);
 
-            THEN("second element will become the new root") {
-                REQUIRE(max_heap.getRoot() == second);
-            }
+        THEN("second element will become the new root") {
+            REQUIRE(max_heap.getRoot() == second);
         }
 
         AND_WHEN("third, smaller element is added") {
-            max_heap.insert(third);
+        max_heap.insert(third);
 
-            THEN("second element is still the root") {
-                REQUIRE(max_heap.getRoot() == second);
-            }
+        THEN("second element is still the root") {
+            REQUIRE(max_heap.getRoot() == second);
         }
 
         AND_WHEN("several larger elements are added") {
-            max_heap.insert(fourth);
-            max_heap.insert(fifth);
-            max_heap.insert(sixth);
+        max_heap.insert(fourth);
+        max_heap.insert(fifth);
+        max_heap.insert(sixth);
 
-            THEN("new levels of binary tree will be filled and the new largest "
-                 "root is selected")
-             {
-                REQUIRE(max_heap.getRoot() == sixth);
-            }
+        THEN("new levels of binary tree will be filled and the new largest "
+             "root is selected")
+        {
+            REQUIRE(max_heap.getRoot() == sixth);
         }
 
         AND_WHEN("root element is removed") {
-            max_heap.eraseRoot();
+        max_heap.eraseRoot();
 
-            THEN("new root will be found") {
-                REQUIRE(max_heap.getRoot() == second);
-            }
+        THEN("new root will be found") {
+            REQUIRE(max_heap.getRoot() == second);
         }
-    }
+    }}}}}
 
     WHEN("multiple elements of the same value are added to heap") {
         constexpr auto same_value = 33;
