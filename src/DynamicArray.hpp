@@ -14,16 +14,18 @@
 namespace median {
 
 /// Dynamically growing array
-/// @remarks For simplicity one can only add elements to the array, not remove
-/// them.
+/// @remarks For simplicity one can only add elements to the array and removal
+/// will only reduce the size and not delete the element.
 /// @remarks Delays allocation to moment when first element is added
-/// @tparam T type of elements stored (implements copyable concept)
+/// @tparam T type of elements stored (implements copyable and trivially
+/// destructable concept)
 /// @tparam growth_factor used every time when we have not enough space
 template<typename T, unsigned int growth_factor>
 class DynamicArray {
 public:
     void push_back(T element);
     size_t getSize() const;
+    void shrink();
     T& operator[](size_t index);
     T const& operator[](size_t index) const;
 
@@ -113,4 +115,14 @@ void median::DynamicArray<T, growth_factor>::grow()
 
     this->data = std::move(new_buffer);
     this->capacity = new_capacity;
+}
+
+template<typename T, unsigned int growth_factor>
+void median::DynamicArray<T, growth_factor>::shrink()
+{
+    if (size == 0) {
+        throw std::runtime_error{"Can't shrink empty table"};
+    }
+
+    --this->size;
 }

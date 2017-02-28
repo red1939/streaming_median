@@ -13,7 +13,7 @@ using MinHeap = median::BinaryHeap<int, median::HeapOrder::MinHeap>;
 using MaxHeap = median::BinaryHeap<int, median::HeapOrder::MaxHeap>;
 
 
-SCENARIO("table can grow", "[DynamicArray]")
+SCENARIO("table can grow and shrink", "[DynamicArray]")
 {
     Array array;
 
@@ -36,15 +36,23 @@ SCENARIO("table can grow", "[DynamicArray]")
             REQUIRE(array.getSize() == elements);
         }
 
-        AND_THEN("no elements are corrupted") {
+        THEN("no elements are corrupted") {
             for (int i = 0; i < elements; ++i) {
                 REQUIRE(array[i] == value);
             };
         }
+
+        AND_WHEN("we shrink the array once") {
+            array.shrink();
+
+            THEN("it's size will get smaller by 1") {
+                REQUIRE(array.getSize() == (elements - 1));
+            }
+        }
     }
 }
 
-SCENARIO("out of bounds index is reported", "[DynamicArray]")
+SCENARIO("validation of contract is reported", "[DynamicArray]")
 {
     Array array;
 
@@ -52,6 +60,10 @@ SCENARIO("out of bounds index is reported", "[DynamicArray]")
         THEN("no index is correct") {
             REQUIRE_THROWS(array[0]);
             REQUIRE_THROWS(array[100]);
+        }
+
+        THEN("we can't shrink the array") {
+            REQUIRE_THROWS(array.shrink());
         }
     }
 
