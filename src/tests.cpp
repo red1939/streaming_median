@@ -219,6 +219,14 @@ SCENARIO("size remains valid", "[BinaryHeap]")
         THEN("size is 1") {
             REQUIRE(min_heap.getSize() == 1);
         }
+
+        AND_WHEN("it's erased") {
+            min_heap.eraseRoot();
+
+            THEN("size is back to 0") {
+                REQUIRE(min_heap.getSize() == 0);
+            }
+        }
     }
 
     WHEN("ten elements are added to heap") {

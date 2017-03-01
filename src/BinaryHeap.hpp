@@ -53,7 +53,7 @@ private:
     static bool shouldWalkUp(T const& parent_value, T const* element_value);
     static bool isHigher(T const& a, T const& b);
     static NextStepDown getNextStepDown(
-        T const& parent_value, T const* left_child, T const* right_child
+        T const* parent_value, T const* left_child, T const* right_child
     );
 
     static constexpr size_t no_element = size_t(-1);
@@ -136,7 +136,7 @@ void median::BinaryHeap<T, order>::eraseRoot()
     auto next_step = NextStepDown::Stop;
     // Heapify-down
     while (
-        (next_step = getNextStepDown(*parent_value, left_value, right_value))
+        (next_step = getNextStepDown(parent_value, left_value, right_value))
         != NextStepDown::Stop
     ) {
         T* value_to_swap{nullptr};
@@ -164,14 +164,12 @@ size_t median::BinaryHeap<T, order>::getSize() const
 template<typename T, median::HeapOrder order>
 size_t median::BinaryHeap<T, order>::getParentIndex(size_t const index)
 {
-    assert(index <= this->getLastIndex());
     return index == 0 ? no_element : ((index + 1) / 2) - 1;
 }
 
 template<typename T, median::HeapOrder order>
 size_t median::BinaryHeap<T, order>::getLeftIndex(size_t const index)
 {
-    assert(index <= this->getLastIndex());
     auto const result = (2 * index) + 1;
     return result > this->getLastIndex() ? no_element : result;
 }
@@ -179,7 +177,6 @@ size_t median::BinaryHeap<T, order>::getLeftIndex(size_t const index)
 template<typename T, median::HeapOrder order>
 size_t median::BinaryHeap<T, order>::getRightIndex(size_t const index)
 {
-    assert(index <= this->getLastIndex());
     auto const result = (2 * index) + 2;
     return result > this->getLastIndex() ? no_element : result;
 }
@@ -212,9 +209,11 @@ size_t median::BinaryHeap<T, order>::getLastIndex() const
 template<typename T, median::HeapOrder order>
 typename median::BinaryHeap<T, order>::NextStepDown
 median::BinaryHeap<T, order>::getNextStepDown(
-    T const& parent_value, T const* const left_child, T const* const right_child
+    T const* const parent, T const* const left_child, T const* const right_child
 ) {
-    T const* const parent = &parent_value;
+    if (!parent) {
+        return NextStepDown::Stop;
+    }
 
     auto new_path = parent;
 
@@ -239,5 +238,8 @@ median::BinaryHeap<T, order>::getNextStepDown(
 template<typename T, median::HeapOrder order>
 T* median::BinaryHeap<T, order>::getValue(size_t index)
 {
-    return index != no_element ? &this->array[index] : nullptr;
+    return
+        index != no_element && index < this->array.getSize() ?
+        &this->array[index] :
+        nullptr;
 }
